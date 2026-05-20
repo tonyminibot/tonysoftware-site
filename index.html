@@ -30,15 +30,15 @@ a{color:var(--a);text-decoration:none}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
 .card{background:#fff;border:1px solid #e9ebf3;border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:10px;transition:transform .15s,box-shadow .15s,border-color .15s}
 .card:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(20,24,60,.10);border-color:#d4dbf0}
-.card .row{display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+.card .head{display:flex;align-items:center;gap:14px;margin-bottom:4px}
+.card .ico{width:52px;height:52px;border-radius:13px;flex-shrink:0;box-shadow:0 4px 12px rgba(20,24,60,.10)}
+.card .row{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex:1;min-width:0}
 .card h3{font-size:22px;font-weight:800;letter-spacing:-.02em}
 .card .pill{font-size:11px;font-weight:700;color:var(--mut);background:#eef0f7;padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
 .card p{color:var(--mut);font-size:15.5px}
 .card .visit{margin-top:6px;color:var(--a);font-weight:700;font-size:14px}
 .card .visit::after{content:" →";transition:transform .15s}
 .card:hover .visit::after{display:inline-block;transform:translateX(3px)}
-.about{padding:48px 22px 24px}
-.about p{color:var(--mut);font-size:16px;max-width:720px;margin:0 auto;text-align:center;line-height:1.7}
 footer{text-align:center;padding:48px 22px 56px;color:var(--mut);font-size:14px}
 footer a{color:var(--mut)}
 footer .sep{margin:0 10px;color:#c8ccda}
@@ -59,35 +59,31 @@ footer .sep{margin:0 10px;color:#c8ccda}
   <div class="grid">
 
     <a class="card" href="https://typingmind.com">
-      <div class="row"><h3>TypingMind</h3><span class="pill">Web · BYOK</span></div>
+      <div class="head"><img class="ico" src="icons/typingmind.png" alt="" width="52" height="52"><div class="row"><h3>TypingMind</h3><span class="pill">Web · BYOK</span></div></div>
       <p>A clean, fast chat UI for every major AI model — bring your own key, own your data, no monthly subscription to a single provider.</p>
       <span class="visit">typingmind.com</span>
     </a>
 
     <a class="card" href="https://devutils.com">
-      <div class="row"><h3>DevUtils</h3><span class="pill">macOS · offline</span></div>
+      <div class="head"><img class="ico" src="icons/devutils.png" alt="" width="52" height="52"><div class="row"><h3>DevUtils</h3><span class="pill">macOS · offline</span></div></div>
       <p>The all-in-one developer's toolbox for macOS. JSON, JWT, base64, regex, time, hash — every utility in one fast, fully-offline app.</p>
       <span class="visit">devutils.com</span>
     </a>
 
     <a class="card" href="https://pulserevenue.app">
-      <div class="row"><h3>Pulse</h3><span class="pill">iOS · private</span></div>
+      <div class="head"><img class="ico" src="icons/pulse.png" alt="" width="52" height="52"><div class="row"><h3>Pulse</h3><span class="pill">iOS · private</span></div></div>
       <p>Your Paddle revenue at a glance — today vs the period before, every transaction searchable, all on-device. Your API key never leaves the phone.</p>
       <span class="visit">pulserevenue.app</span>
     </a>
 
     <a class="card" href="https://flownmap.com">
-      <div class="row"><h3>Skyline</h3><span class="pill">iOS · on-device AI</span></div>
+      <div class="head"><img class="ico" src="icons/skyline.png" alt="" width="52" height="52"><div class="row"><h3>Skyline</h3><span class="pill">iOS · on-device AI</span></div></div>
       <p>Snap a boarding pass; Skyline reads it with on-device AI and pins the flight as a glowing arc on a living 3D globe. No account, works in Airplane Mode.</p>
       <span class="visit">flownmap.com</span>
     </a>
 
   </div>
 </main>
-
-<section class="about wrap">
-  <p>Built around a simple bias: software should respect your time and your data — no servers when possible, no accounts when avoidable, your stuff stays on your device.</p>
-</section>
 
 <footer>
   <a href="https://x.com/tdinh_me">@tdinh_me</a>
