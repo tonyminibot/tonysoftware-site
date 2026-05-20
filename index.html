@@ -1,0 +1,98 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tony Dinh — Indie software, shipped from Vietnam</title>
+<meta name="description" content="Indie software by Tony Dinh — TypingMind, DevUtils, Pulse, Skyline. Built for developers and people who like clean tools.">
+<link rel="canonical" href="https://tonysoftware.com/">
+<meta name="theme-color" content="#0a0f24">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tonysoftware.com/">
+<meta property="og:title" content="Tony Dinh — Indie software, shipped from Vietnam">
+<meta property="og:description" content="Indie software by Tony Dinh — TypingMind, DevUtils, Pulse, Skyline.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@tdinh_me">
+<meta name="twitter:creator" content="@tdinh_me">
+<style>
+:root{--ink:#0b1020;--mut:#5b6178;--bg:#f6f7fb;--a:#3a6df0}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font:17px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+a{color:var(--a);text-decoration:none}
+.hero{background:radial-gradient(120% 90% at 50% 0%,#16224d 0%,#0a0f24 55%,#05070f 100%);color:#fff;text-align:center;padding:84px 22px 64px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:auto -10% -45% -10%;height:60%;background:radial-gradient(closest-side,rgba(74,120,255,.28),transparent)}
+.hero .name{font-size:clamp(34px,5vw,52px);font-weight:800;letter-spacing:-.025em;line-height:1.05}
+.hero .tag{font-size:clamp(17px,2.2vw,21px);color:#c4cdf0;margin:18px auto 26px;max-width:560px}
+.hero .links{display:inline-flex;gap:18px;flex-wrap:wrap;justify-content:center;font-size:15px}
+.hero .links a{color:#c4cdf0;text-decoration:none;padding:8px 16px;border:1px solid rgba(255,255,255,.18);border-radius:999px;transition:background .15s}
+.hero .links a:hover{background:rgba(255,255,255,.08)}
+.section{padding:64px 22px 24px}
+.section h2{font-size:13px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.12em;margin-bottom:24px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.card{background:#fff;border:1px solid #e9ebf3;border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:10px;transition:transform .15s,box-shadow .15s,border-color .15s}
+.card:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(20,24,60,.10);border-color:#d4dbf0}
+.card .row{display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+.card h3{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.card .pill{font-size:11px;font-weight:700;color:var(--mut);background:#eef0f7;padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.card p{color:var(--mut);font-size:15.5px}
+.card .visit{margin-top:6px;color:var(--a);font-weight:700;font-size:14px}
+.card .visit::after{content:" →";transition:transform .15s}
+.card:hover .visit::after{display:inline-block;transform:translateX(3px)}
+.about{padding:48px 22px 24px}
+.about p{color:var(--mut);font-size:16px;max-width:720px;margin:0 auto;text-align:center;line-height:1.7}
+footer{text-align:center;padding:48px 22px 56px;color:var(--mut);font-size:14px}
+footer a{color:var(--mut)}
+footer .sep{margin:0 10px;color:#c8ccda}
+@media(max-width:680px){.grid{grid-template-columns:1fr;gap:16px}.section{padding:48px 22px 16px}.card{padding:24px}}
+</style></head><body>
+
+<header class="hero">
+  <h1 class="name">Tony Dinh</h1>
+  <p class="tag">Indie software, shipped from Vietnam. I build clean tools for developers and a few apps I wish existed.</p>
+  <div class="links">
+    <a href="https://x.com/tdinh_me">@tdinh_me on X</a>
+    <a href="https://github.com/tonyminibot">github</a>
+  </div>
+</header>
+
+<main class="wrap section">
+  <h2>Things I've built</h2>
+  <div class="grid">
+
+    <a class="card" href="https://typingmind.com">
+      <div class="row"><h3>TypingMind</h3><span class="pill">Web · BYOK</span></div>
+      <p>A clean, fast chat UI for every major AI model — bring your own key, own your data, no monthly subscription to a single provider.</p>
+      <span class="visit">typingmind.com</span>
+    </a>
+
+    <a class="card" href="https://devutils.com">
+      <div class="row"><h3>DevUtils</h3><span class="pill">macOS · offline</span></div>
+      <p>The all-in-one developer's toolbox for macOS. JSON, JWT, base64, regex, time, hash — every utility in one fast, fully-offline app.</p>
+      <span class="visit">devutils.com</span>
+    </a>
+
+    <a class="card" href="https://pulserevenue.app">
+      <div class="row"><h3>Pulse</h3><span class="pill">iOS · private</span></div>
+      <p>Your Paddle revenue at a glance — today vs the period before, every transaction searchable, all on-device. Your API key never leaves the phone.</p>
+      <span class="visit">pulserevenue.app</span>
+    </a>
+
+    <a class="card" href="https://flownmap.com">
+      <div class="row"><h3>Skyline</h3><span class="pill">iOS · on-device AI</span></div>
+      <p>Snap a boarding pass; Skyline reads it with on-device AI and pins the flight as a glowing arc on a living 3D globe. No account, works in Airplane Mode.</p>
+      <span class="visit">flownmap.com</span>
+    </a>
+
+  </div>
+</main>
+
+<section class="about wrap">
+  <p>Built around a simple bias: software should respect your time and your data — no servers when possible, no accounts when avoidable, your stuff stays on your device.</p>
+</section>
+
+<footer>
+  <a href="https://x.com/tdinh_me">@tdinh_me</a>
+  <span class="sep">·</span>
+  <a href="https://github.com/tonyminibot">github</a>
+</footer>
+
+</body></html>
