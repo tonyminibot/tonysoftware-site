@@ -10,10 +10,6 @@
 - [Skyline](https://flownmap.com): Snap a boarding pass; Skyline reads it with on-device AI and pins the flight on a 3D globe. Native iOS, works offline.
 - [Aside](https://getaside.app): Private on-device AI chat for iPhone. Powered by Apple Intelligence — Image Playground, Writing Tools, Translate, Summarize, Smart Reply, all local.
 
-## Claude Code agents
-
-- [iOS Icon Designer Agent](https://tonysoftware.com/agents/ios-icon-designer/): A specialized Claude Code subagent that designs and ships iOS app icons in the modern soft-3D / vibrant-gradient style. Includes the agent .md file, vetted gpt-image-2 prompt template, xcassets packaging recipe, 60-pixel squint test, and 20 sample 1024×1024 icons. $9 one-time on Polar.
-
 ## Developer source bundles
 
 - [Pulse — source bundle](https://pulserevenue.app/#source): Full SwiftUI + WidgetKit + Paddle Billing API client source. $19.
