@@ -1,0 +1,215 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>iOS Icon Designer Agent — for Claude Code · Tony Software</title>
+<meta name="description" content="A specialized Claude Code subagent that designs iOS app icons in the modern soft-3D / vibrant-gradient style. $9 one-time.">
+<link rel="canonical" href="https://tonysoftware.com/agents/ios-icon-designer/">
+<meta name="theme-color" content="#0a0f24">
+<meta property="og:type" content="product">
+<meta property="og:url" content="https://tonysoftware.com/agents/ios-icon-designer/">
+<meta property="og:title" content="iOS Icon Designer Agent — for Claude Code">
+<meta property="og:description" content="Designs and ships iOS app icons in the modern soft-3D / vibrant-gradient style. $9 one-time.">
+<meta property="og:image" content="https://tonysoftware.com/agents/ios-icon-designer/samples/01_lumen.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Product",
+  "name":"iOS Icon Designer Agent — for Claude Code",
+  "description":"A specialized Claude Code subagent that designs iOS app icons in the modern soft-3D / vibrant-gradient style. Includes 10 sample icons.",
+  "image":"https://tonysoftware.com/agents/ios-icon-designer/samples/01_lumen.png",
+  "brand":{"@type":"Brand","name":"Tony Software"},
+  "offers":{
+    "@type":"Offer",
+    "price":"9",
+    "priceCurrency":"USD",
+    "availability":"https://schema.org/InStock",
+    "url":"https://buy.polar.sh/polar_cl_g3NJQil45kpnqtaQh1rSeVdiCXN6a6oyBPA5B1nqtpi"
+  }
+}
+</script>
+<style>
+:root{--ink:#0b1020;--mut:#5b6178;--bg:#f6f7fb;--a:#3a6df0;--accent:#5b4fd5;--accent-2:#7466f0}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font:17px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+a{color:var(--a);text-decoration:none}
+code{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:13.5px;background:#eef0f7;padding:2px 7px;border-radius:5px;color:var(--ink)}
+.topbar{padding:20px 22px;border-bottom:1px solid #e9ebf3;background:#fff}
+.topbar .wrap{display:flex;align-items:center;gap:18px;font-size:14px}
+.topbar .brand{font-weight:800;color:var(--ink)}
+.topbar .links{margin-left:auto;display:flex;gap:18px;color:var(--mut)}
+.hero{background:linear-gradient(150deg,#1b2a6b,#3a1e7a 60%,#5a2a8c);color:#fff;padding:64px 22px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center}
+.hero .crumb{font-size:13.5px;color:#a7adcc;text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin-bottom:18px}
+.hero .crumb a{color:#a7adcc}
+.hero h1{font-size:clamp(30px,4vw,42px);font-weight:800;letter-spacing:-.02em;line-height:1.12}
+.hero p.sub{font-size:18px;color:#dad5ff;margin:16px 0 26px;max-width:520px;line-height:1.55}
+.hero .ctas{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:14px 22px;border-radius:12px;font-weight:700;font-size:15.5px;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:#fff;color:var(--accent);box-shadow:0 6px 20px rgba(0,0,0,.20)}
+.btn-secondary{background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.20)}
+.hero .price{font-size:18px;color:#cdc6ff}
+.hero .price b{color:#fff;font-size:24px;font-weight:800}
+.hero .heroshot{display:flex;justify-content:center;align-items:center}
+.hero .heroshot img{width:240px;height:240px;border-radius:53px;box-shadow:0 34px 80px rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.10)}
+
+.section{padding:64px 22px 24px}
+.section h2{font-size:13px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.12em;margin-bottom:20px}
+.section h3{font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:14px}
+
+/* sample grid */
+.samples{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:18px}
+.sample{display:flex;flex-direction:column;align-items:center;text-align:center}
+.sample img{width:100%;border-radius:22px;box-shadow:0 8px 24px rgba(20,24,60,.10);border:1px solid #e2e4ee}
+.sample .name{font-size:13.5px;font-weight:700;color:var(--ink);margin-top:9px}
+.sample .desc{font-size:12px;color:var(--mut)}
+
+/* what-you-get + how-it-works */
+.bullets{list-style:none;padding:0;margin:18px 0 0 0;display:grid;gap:11px}
+.bullets li{position:relative;padding-left:30px;font-size:15.5px;line-height:1.55;color:var(--mut)}
+.bullets li::before{content:"✓";position:absolute;left:0;top:0;color:#1e7d39;font-weight:800}
+.bullets li b{color:var(--ink);font-weight:700}
+
+/* card row */
+.cardrow{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.card{background:#fff;border:1px solid #e9ebf3;border-radius:18px;padding:28px}
+.card h3{font-size:20px;margin-bottom:12px}
+.card p{color:var(--mut);font-size:15px;line-height:1.6}
+.card .step{display:flex;align-items:start;gap:14px;margin-top:14px}
+.card .step .num{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13.5px}
+.card .step .body{font-size:14.5px;color:var(--mut);line-height:1.55}
+.card .step .body b{color:var(--ink)}
+
+/* final CTA */
+.final{background:linear-gradient(160deg,#3a3578 0%,#5b4fd5 55%,#7466f0 100%);color:#fff;padding:60px 22px;text-align:center}
+.final h2{font-size:28px;font-weight:800;letter-spacing:-.02em;margin-bottom:14px;color:#fff;text-transform:none}
+.final p{color:#dad5ff;font-size:16.5px;margin-bottom:24px;max-width:560px;margin-left:auto;margin-right:auto}
+.final .btn-primary{font-size:16px;padding:15px 26px}
+.final .small{font-size:13px;color:#a39ad3;margin-top:14px}
+
+footer{text-align:center;padding:48px 22px 56px;color:var(--mut);font-size:14px}
+footer a{color:var(--mut)}
+footer .sep{margin:0 10px;color:#c8ccda}
+
+@media(max-width:760px){
+  .hero .wrap{grid-template-columns:1fr;gap:36px;text-align:center}
+  .hero p.sub{margin-left:auto;margin-right:auto}
+  .hero .ctas{justify-content:center}
+  .samples{grid-template-columns:repeat(3,1fr)}
+  .cardrow{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .samples{grid-template-columns:repeat(2,1fr)}
+  .hero .heroshot img{width:200px;height:200px;border-radius:44px}
+}
+</style></head><body>
+
+<nav class="topbar"><div class="wrap">
+  <a class="brand" href="/">← Tony Software</a>
+  <div class="links">
+    <a href="/">Apps</a>
+    <a href="/agents/">Agents</a>
+  </div>
+</div></nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="crumb"><a href="/agents/">AI Agents</a> · for Claude Code</div>
+      <h1>iOS Icon Designer Agent</h1>
+      <p class="sub">A specialized subagent that designs and ships iOS app icons in the modern soft-3D / vibrant-gradient style. Drop into <code style="background:rgba(255,255,255,.12);color:#fff">~/.claude/agents/</code>, restart your session, call from any iOS project.</p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="https://buy.polar.sh/polar_cl_g3NJQil45kpnqtaQh1rSeVdiCXN6a6oyBPA5B1nqtpi">Buy the agent — $9</a>
+        <a class="btn btn-secondary" href="#samples">See samples ↓</a>
+      </div>
+      <p class="price" style="margin-top:18px"><b>$9</b> one-time · instant download · future updates free</p>
+    </div>
+    <div class="heroshot">
+      <img src="samples/02_tide.png" alt="A sample iOS app icon designed by the agent — crescent moon over a calm wave on a midnight gradient">
+    </div>
+  </div>
+</header>
+
+<main class="wrap section" id="samples">
+  <h2>10 sample icons — each generated by the agent</h2>
+  <h3>One agent, one prompt template, ten distinct apps.</h3>
+  <p style="color:var(--mut);font-size:15.5px;max-width:680px;margin-bottom:26px">Each of these started as a single-line concept (&ldquo;a habit-streak tracker called Lumen&rdquo;, &ldquo;a sleep tracker called Tide&rdquo;…). The agent picked the metaphor, palette, prompt, and ran the gpt-image-2 generation. No retries, no manual editing. This is the consistency the bundle ships.</p>
+  <div class="samples">
+    <div class="sample"><img src="samples/01_lumen.png" alt="Lumen icon — warm flame on indigo-magenta gradient"><div class="name">Lumen</div><div class="desc">Habit-streak tracker</div></div>
+    <div class="sample"><img src="samples/02_tide.png" alt="Tide icon — crescent moon over wave on midnight gradient"><div class="name">Tide</div><div class="desc">Sleep tracker</div></div>
+    <div class="sample"><img src="samples/03_wisp.png" alt="Wisp icon — feather quill on cream-rose gradient"><div class="name">Wisp</div><div class="desc">Journaling</div></div>
+    <div class="sample"><img src="samples/04_hatch.png" alt="Hatch icon — cracked egg with sparkle on mint gradient"><div class="name">Hatch</div><div class="desc">Task manager</div></div>
+    <div class="sample"><img src="samples/05_glint.png" alt="Glint icon — aperture lens on amber-bronze gradient"><div class="name">Glint</div><div class="desc">Photo editor</div></div>
+    <div class="sample"><img src="samples/06_kettle.png" alt="Kettle icon — steaming mug on coral-peach gradient"><div class="name">Kettle</div><div class="desc">Recipe app</div></div>
+    <div class="sample"><img src="samples/07_sprout.png" alt="Sprout icon — leaf sprout on cream-sage gradient"><div class="name">Sprout</div><div class="desc">Plant care</div></div>
+    <div class="sample"><img src="samples/08_beacon.png" alt="Beacon icon — lighthouse with beam on teal-navy gradient"><div class="name">Beacon</div><div class="desc">Focus timer</div></div>
+    <div class="sample"><img src="samples/09_verse.png" alt="Verse icon — open book with bookmark on plum gradient"><div class="name">Verse</div><div class="desc">Note-taking</div></div>
+    <div class="sample"><img src="samples/10_atlas.png" alt="Atlas icon — compass with star on forest-teal gradient"><div class="name">Atlas</div><div class="desc">Travel journal</div></div>
+  </div>
+</main>
+
+<main class="wrap section">
+  <h2>What's in the bundle</h2>
+  <ul class="bullets">
+    <li><b>The agent file</b> — <code>ios-icon-designer.md</code>, 12 KB markdown. Drop into <code>~/.claude/agents/</code> and Claude registers it on next session.</li>
+    <li><b>House style spec</b> — background palettes, subject form, accent rules, safe-area guidelines. Codified from a curated reference grid of well-designed iOS icons.</li>
+    <li><b>Vetted gpt-image-2 prompt template</b> — with the hard <i>NO text/letters/numbers</i> guardrail (the model loves to stamp app names otherwise).</li>
+    <li><b>The single-1024-PNG xcassets recipe</b> — modern <code>AppIcon.appiconset</code> packaging, no hand-generating 12 sizes.</li>
+    <li><b>60-pixel squint test</b> — encoded verification step so you don't ship an icon that mushes at Spotlight size.</li>
+    <li><b>Worked examples</b> from three real shipped apps (Pulse, Aside, Skyline) — exact prompt seeds to adapt.</li>
+    <li><b>10 sample icons</b> — all the icons above, full 1024×1024, ready to study or reference. Plus a single-page PDF contact sheet.</li>
+    <li><b>30-second install guide</b> — README walks you through the setup.</li>
+  </ul>
+</main>
+
+<main class="wrap section">
+  <h2>How it works</h2>
+  <div class="cardrow">
+    <div class="card">
+      <h3>The workflow</h3>
+      <div class="step"><div class="num">1</div><div class="body"><b>Install once</b> — copy <code>ios-icon-designer.md</code> into <code>~/.claude/agents/</code>. Restart your Claude Code session.</div></div>
+      <div class="step"><div class="num">2</div><div class="body"><b>Brief the agent</b> — &ldquo;use the ios-icon-designer agent to design an icon for my app X, which is a Y for Z&rdquo;. Optionally name palettes to avoid (e.g. you already have a purple chat app).</div></div>
+      <div class="step"><div class="num">3</div><div class="body"><b>It picks the metaphor</b> — and writes the prompt, runs gpt-image-2, downloads the PNG, packages it into your <code>AppIcon.appiconset</code>, and runs the squint test.</div></div>
+      <div class="step"><div class="num">4</div><div class="body"><b>You review</b> — agent won't auto-commit. Approve, regenerate with a tweak, or pivot to another concept.</div></div>
+    </div>
+    <div class="card">
+      <h3>What you'll need</h3>
+      <div class="step"><div class="num">·</div><div class="body"><b>Claude Code</b> — the CLI agent runtime. Free.</div></div>
+      <div class="step"><div class="num">·</div><div class="body"><b>An OpenAI API key</b> with <code>gpt-image-2</code> access. The agent reads it from <code>~/.secrets/openai_key</code>. Each icon costs ~$0.07 in API spend at high quality.</div></div>
+      <div class="step"><div class="num">·</div><div class="body"><b>An iOS project</b> (Xcode or xcodegen-managed) where you want the icon to land. Or just run the agent and point it at any folder.</div></div>
+      <div class="step"><div class="num">·</div><div class="body"><b>macOS</b> — the agent uses <code>sips</code> for downscaling. Easy to swap for ImageMagick elsewhere.</div></div>
+    </div>
+  </div>
+</main>
+
+<main class="wrap section">
+  <h2>License + delivery</h2>
+  <ul class="bullets">
+    <li><b>Personal and commercial use</b> — ship icons in any apps you publish, including apps under your own branding or your clients'. No attribution required.</li>
+    <li><b>Future updates included</b> — re-download from your Polar purchase portal whenever the agent is improved.</li>
+    <li><b>Resale of the agent file itself</b> is not permitted — the icons it generates are yours, but the recipe is the product.</li>
+    <li><b>7-day money-back guarantee</b> — if it doesn't work for you, email <a href="mailto:support@tonysoftware.com">support@tonysoftware.com</a>.</li>
+    <li><b>Payment via Polar</b> — Stripe under the hood, Merchant of Record handles VAT. Instant download link by email.</li>
+  </ul>
+</main>
+
+<section class="final">
+  <h2>Ship the icon today.</h2>
+  <p>Install the agent in 30 seconds. Run gpt-image-2 a few times. Pick the one you like. Drop it in. Done.</p>
+  <a class="btn btn-primary" href="https://buy.polar.sh/polar_cl_g3NJQil45kpnqtaQh1rSeVdiCXN6a6oyBPA5B1nqtpi">Buy the agent — $9</a>
+  <div class="small">Instant download · Future updates included · 7-day money-back</div>
+</section>
+
+<footer>
+  <a href="/">Tony Software</a>
+  <span class="sep">·</span>
+  <a href="/agents/">All agents</a>
+  <span class="sep">·</span>
+  <a href="https://x.com/tdinh_me">@tdinh_me</a>
+  <span class="sep">·</span>
+  <a href="https://github.com/tonyminibot">github</a>
+</footer>
+
+</body></html>
