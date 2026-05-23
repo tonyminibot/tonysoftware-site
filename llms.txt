@@ -1,0 +1,28 @@
+# Tony Software
+
+> Indie software shipped from Vietnam by Tony Dinh — clean tools for developers and a few apps Tony wished existed. The portfolio spans iOS apps, dev tools, and Claude Code subagents.
+
+## Apps
+
+- [TypingMind](https://typingmind.com): A clean, fast chat UI for every major AI model — bring your own key, own your data, no monthly subscription. Web app.
+- [DevUtils](https://devutils.com): The all-in-one developer's toolbox for macOS — JSON, JWT, base64, regex, time, hash. Fully offline.
+- [Pulse](https://pulserevenue.app): Your Paddle revenue on your iPhone. Private, native iOS analytics — today/7d/30d, transactions, widgets, all on-device. BYOK Paddle API key in Keychain.
+- [Skyline](https://flownmap.com): Snap a boarding pass; Skyline reads it with on-device AI and pins the flight on a 3D globe. Native iOS, works offline.
+- [Aside](https://getaside.app): Private on-device AI chat for iPhone. Powered by Apple Intelligence — Image Playground, Writing Tools, Translate, Summarize, Smart Reply, all local.
+
+## Claude Code agents
+
+- [iOS Icon Designer Agent](https://tonysoftware.com/agents/ios-icon-designer/): A specialized Claude Code subagent that designs and ships iOS app icons in the modern soft-3D / vibrant-gradient style. Includes the agent .md file, vetted gpt-image-2 prompt template, xcassets packaging recipe, 60-pixel squint test, and 20 sample 1024×1024 icons. $9 one-time on Polar.
+
+## Developer source bundles
+
+- [Pulse — source bundle](https://pulserevenue.app/#source): Full SwiftUI + WidgetKit + Paddle Billing API client source. $19.
+- [Skyline — source bundle](https://flownmap.com/#source): Full SwiftUI + SceneKit 3D globe + on-device boarding-pass parser source. $19.
+- [Aside — source bundle](https://getaside.app/#source): Full SwiftUI + FoundationModels + SwiftData persistence source. $19.
+- [Pulse + Skyline bundle](https://buy.polar.sh/polar_cl_O7W1Ojtq3ORpREu9TfI6PpUe6BgKbNq2wCfFY188eiZ): Both iOS source bundles in one purchase. $29 (save $9).
+
+## About
+
+- [@tdinh_me on X](https://x.com/tdinh_me)
+- [tonyminibot on GitHub](https://github.com/tonyminibot)
+- Based in Đà Nẵng, Vietnam.
