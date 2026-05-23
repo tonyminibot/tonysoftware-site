@@ -1,47 +1,52 @@
 <!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AI Agents · Tony Software</title>
-<meta name="description" content="Specialized Claude Code subagents I built and use in production. Drop into ~/.claude/agents/ and they're ready.">
+<meta name="description" content="Specialized Claude Code subagents I built and use in production.">
 <link rel="canonical" href="https://tonysoftware.com/agents/">
-<meta name="theme-color" content="#0a0f24">
+<meta name="theme-color" content="#FFFAF1">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://tonysoftware.com/agents/">
 <meta property="og:title" content="AI Agents · Tony Software">
 <meta property="og:description" content="Specialized Claude Code subagents I built and use in production.">
 <style>
-:root{--ink:#0b1020;--mut:#5b6178;--bg:#f6f7fb;--a:#3a6df0}
+:root{--ink:#1f1d1a;--mut:#75716a;--bg:#FFFAF1;--card:#FFFFFF;--line:#EFE6D3;--accent:#E07B4F}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
 body{font:17px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
-.wrap{max-width:980px;margin:0 auto;padding:0 22px}
-a{color:var(--a);text-decoration:none}
-.topbar{padding:20px 22px;border-bottom:1px solid #e9ebf3;background:#fff}
+.wrap{max-width:1020px;margin:0 auto;padding:0 24px}
+a{color:var(--accent);text-decoration:none}
+code{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:13.5px;background:#F4EBD7;padding:2px 7px;border-radius:5px;color:var(--ink)}
+
+.topbar{padding:20px 24px;border-bottom:1px solid var(--line)}
 .topbar .wrap{display:flex;align-items:center;gap:18px;font-size:14px}
 .topbar .brand{font-weight:800;color:var(--ink)}
 .topbar .links{margin-left:auto;display:flex;gap:18px;color:var(--mut)}
-.hero{padding:64px 22px 24px;text-align:center}
-.hero h1{font-size:clamp(30px,4.5vw,44px);font-weight:800;letter-spacing:-.025em;line-height:1.1}
-.hero p{font-size:17.5px;color:var(--mut);margin:16px auto 0;max-width:620px}
-.section{padding:32px 22px 64px}
+.topbar a{color:var(--mut)}
+
+.hero{padding:72px 24px 32px;text-align:center}
+.hero h1{font-size:clamp(32px,4.4vw,46px);font-weight:800;letter-spacing:-.025em;line-height:1.08;color:var(--ink)}
+.hero p{font-size:17.5px;color:var(--mut);margin:18px auto 0;max-width:620px;line-height:1.55}
+
+.section{padding:24px 24px 64px}
+.intro{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 28px;margin:0 auto 28px;max-width:880px;font-size:15.5px;color:var(--mut);line-height:1.65}
+.intro b{color:var(--ink)}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
-.card{background:#fff;border:1px solid #e9ebf3;border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:10px;transition:transform .15s,box-shadow .15s,border-color .15s}
-.card:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(20,24,60,.10);border-color:#d4dbf0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:10px;transition:transform .15s,box-shadow .15s,border-color .15s;color:var(--ink)}
+.card:hover{transform:translateY(-2px);box-shadow:0 18px 36px rgba(31,29,26,.08);border-color:#dfd2b3}
 .card .head{display:flex;align-items:center;gap:14px;margin-bottom:4px}
-.card .ico{width:52px;height:52px;border-radius:13px;flex-shrink:0;box-shadow:0 4px 12px rgba(20,24,60,.10);background:linear-gradient(135deg,#5b4fd5,#7466f0);display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff}
+.card .ico{width:54px;height:54px;border-radius:13px;flex-shrink:0;box-shadow:0 4px 12px rgba(31,29,26,.10);background:linear-gradient(135deg,#E07B4F,#F3A37A);display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff}
 .card .row{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex:1;min-width:0}
 .card h3{font-size:22px;font-weight:800;letter-spacing:-.02em}
-.card .pill{font-size:11px;font-weight:700;color:var(--mut);background:#eef0f7;padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.card .pill{font-size:11px;font-weight:700;color:var(--mut);background:#F4EBD7;padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
 .card p{color:var(--mut);font-size:15.5px}
-.card .visit{margin-top:6px;color:var(--a);font-weight:700;font-size:14px}
+.card .visit{margin-top:6px;color:var(--accent);font-weight:700;font-size:14px}
 .card .visit::after{content:" →";transition:transform .15s}
 .card:hover .visit::after{display:inline-block;transform:translateX(3px)}
-.intro{background:#fff;border:1px solid #e9ebf3;border-radius:18px;padding:24px 28px;margin-bottom:26px;font-size:15.5px;color:var(--mut);line-height:1.65}
-.intro b{color:var(--ink)}
-.intro code{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:13.5px;background:#eef0f7;padding:2px 7px;border-radius:5px;color:var(--ink)}
-footer{text-align:center;padding:48px 22px 56px;color:var(--mut);font-size:14px}
+
+footer{text-align:center;padding:40px 24px 56px;color:var(--mut);font-size:14px}
 footer a{color:var(--mut)}
-footer .sep{margin:0 10px;color:#c8ccda}
-@media(max-width:680px){.grid{grid-template-columns:1fr;gap:16px}.section{padding:24px 22px 48px}.card{padding:24px}}
+footer .sep{margin:0 10px;color:#d2c8b3}
+
+@media(max-width:680px){.grid{grid-template-columns:1fr;gap:16px}.card{padding:24px}}
 </style></head><body>
 
 <nav class="topbar"><div class="wrap">
@@ -53,24 +58,22 @@ footer .sep{margin:0 10px;color:#c8ccda}
 </div></nav>
 
 <header class="hero">
-  <h1>AI Agents I built — for Claude Code</h1>
-  <p>Specialized subagents I use every day. Each one is a single markdown file that goes into your <code style="font-family:ui-monospace,Menlo,monospace;font-size:14px;background:#eef0f7;padding:2px 7px;border-radius:5px">~/.claude/agents/</code> folder. Drop in, restart your session, call by name.</p>
+  <h1>AI Agents — for Claude Code</h1>
+  <p>Specialized subagents I built and use every day. Each is a single markdown file that goes into your <code>~/.claude/agents/</code> folder. Drop in, restart, call by name.</p>
 </header>
 
 <main class="wrap section">
 
   <div class="intro">
-    <b>What's a Claude Code subagent?</b> A specialized helper inside Claude Code with its own role, system prompt, and decision rules. You delegate a task — &ldquo;use the X agent to do Y&rdquo; — and it runs in its own context, reports back when done. Great for codifying a specific skill so you (or your team's Claude) doesn't re-derive the recipe every time.
+    <b>What's a Claude Code subagent?</b> A specialized helper with its own role, system prompt, and decision rules. You delegate a task — &ldquo;use the X agent to do Y&rdquo; — and it runs in its own context, reports back when done. Great for codifying a specific skill so you don't re-derive the recipe every time.
   </div>
 
   <div class="grid">
-
-    <a class="card" href="/agents/ios-icon-designer/">
+    <a class="card" href="/agents/ios-icon-designer/" style="grid-column:1/-1">
       <div class="head"><div class="ico">✦</div><div class="row"><h3>iOS Icon Designer</h3><span class="pill">Claude · $9</span></div></div>
-      <p>Designs and ships iOS app icons in the modern soft-3D / vibrant-gradient style. Vetted gpt-image-2 prompt template, xcassets packaging recipe, 60-pixel squint test. 10 sample icons included.</p>
-      <span class="visit">See samples + buy</span>
+      <p>Designs and ships iOS app icons in the modern soft-3D / vibrant-gradient style. Vetted gpt-image-2 prompt template, xcassets packaging recipe, 60-pixel squint test. 20 sample icons included.</p>
+      <span class="visit">See samples + get the agent</span>
     </a>
-
   </div>
 
 </main>
