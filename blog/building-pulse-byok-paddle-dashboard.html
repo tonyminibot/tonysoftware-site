@@ -60,7 +60,7 @@ footer a{color:var(--mut)}
 
 <p>I check my Paddle revenue about ten times a day. The web dashboard takes 3-4 seconds to load on a good connection, longer when I'm tethered, and the data I actually care about — <em>how am I doing today vs the average?</em> — is buried under three clicks and a date-picker that doesn't remember my last choice.</p>
 
-<p>So I built <a href="https://pulserevenue.app">Pulse</a>: a native iOS app that talks to Paddle directly from the phone. Today / 7-day / 30-day windows, each with a comparison against the previous period of equal length, and Home + Lock screen widgets so I see the number without unlocking. Free on the <a href="https://apps.apple.com/app/pulse-paddle-revenue/id6747657091">App Store</a>; the full Xcode source is <a href="https://buy.polar.sh/polar_cl_Ho9r10UJfm1zHYGPT4GEFg2q9uhKTxwSaAs6a1vr6Gd">$19 on Polar</a> if you want to fork it.</p>
+<p>So I built <a href="https://pulserevenue.app">Pulse</a>: a native iOS app that talks to Paddle directly from the phone. Today / 7-day / 30-day windows, each with a comparison against the previous period of equal length, and Home + Lock screen widgets so I see the number without unlocking. Free on the <a href="https://apps.apple.com/app/pulse-paddle-revenue/id6747657091">App Store</a>; the full Xcode source is <a href="https://pulserevenue.app/?utm_source=tonysoftware&utm_medium=blog&utm_campaign=building-pulse#source">$19 on Polar</a> if you want to fork it.</p>
 
 <p>This is the architecture writeup — what the app does, why it's structured the way it is, and the one piece of logic that took the longest to get right (cross-period comparison when the current period isn't done yet).</p>
 
@@ -158,7 +158,7 @@ let prev = series(prevRange)
 <div class="cta">
   <h3>Build your own</h3>
   <p>Pulse source bundle — full Xcode project + AGENTS.md. $19 one-time, no subscription.</p>
-  <a class="btn" href="https://buy.polar.sh/polar_cl_Ho9r10UJfm1zHYGPT4GEFg2q9uhKTxwSaAs6a1vr6Gd">Buy the source — $19</a>
+  <a class="btn" href="https://pulserevenue.app/?utm_source=tonysoftware&utm_medium=blog&utm_campaign=building-pulse#source">Buy the source — $19</a>
 </div>
 
 </article>
