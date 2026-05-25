@@ -9,6 +9,12 @@
 - [Pulse](https://pulserevenue.app): Your Paddle revenue on your iPhone. Private, native iOS analytics — today/7d/30d, transactions, widgets, all on-device. BYOK Paddle API key in Keychain.
 - [Skyline](https://flownmap.com): Snap a boarding pass; Skyline reads it with on-device AI and pins the flight on a 3D globe. Native iOS, works offline.
 - [Aside](https://getaside.app): Private on-device AI chat for iPhone. Powered by Apple Intelligence — Image Playground, Writing Tools, Translate, Summarize, Smart Reply, all local.
+- [Holler](https://holler.tonysoftware.com): A global one-post-at-a-time microblog. Sign in with Apple, post a line, see everyone else's posts in reverse-chronological order. iOS app in private beta; public web feed live.
+
+## Writing
+
+- [Building Aside: a private on-device AI chat in 13 builds](https://tonysoftware.com/blog/building-aside-on-device-ai-chat): architecture writeup of Aside's source — session-rebinding pattern, all 5 Apple Intelligence demo integrations, SwiftData migration trail, iOS 26 availability fallbacks.
+- [RSS feed](https://tonysoftware.com/blog/rss.xml)
 
 ## Developer source bundles
 
