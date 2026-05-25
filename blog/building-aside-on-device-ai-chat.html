@@ -1,0 +1,191 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Building Aside: a private on-device AI chat in 13 builds — Tony Dinh</title>
+<meta name="description" content="How to ship an iOS chat app on top of Apple Intelligence's FoundationModels framework — no cloud, no API key, no account. Five AI integrations (Image Playground, Writing Tools, Translate, Summarize, Smart Reply) stitched into one chat. ~2,800 lines of SwiftUI + FoundationModels + SwiftData.">
+<link rel="canonical" href="https://tonysoftware.com/blog/building-aside-on-device-ai-chat">
+<meta name="theme-color" content="#0a0f24">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tonysoftware.com/blog/building-aside-on-device-ai-chat">
+<meta property="og:title" content="Building Aside: a private on-device AI chat in 13 builds">
+<meta property="og:description" content="iOS chat app on top of Apple Intelligence's FoundationModels — no cloud, no API key, no account. Five AI integrations stitched into one chat.">
+<meta property="og:image" content="https://tonysoftware.com/og.png">
+<meta property="article:author" content="Tony Dinh">
+<meta property="article:published_time" content="2026-05-25T10:30:00+07:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@tdinh_me">
+<meta name="twitter:creator" content="@tdinh_me">
+<link rel="icon" type="image/png" href="/icon.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"Building Aside: a private on-device AI chat in 13 builds","datePublished":"2026-05-25T10:30:00+07:00","dateModified":"2026-05-25T10:30:00+07:00","author":{"@type":"Person","name":"Tony Dinh","url":"https://tonysoftware.com/"},"image":"https://tonysoftware.com/og.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://tonysoftware.com/blog/building-aside-on-device-ai-chat"},"publisher":{"@type":"Person","name":"Tony Dinh"}}
+</script>
+<style>
+:root{--ink:#0b1020;--mut:#5b6178;--bg:#f6f7fb;--a:#3a6df0;--code:#f0f2f8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:17px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+.wrap{max-width:720px;margin:0 auto;padding:0 22px}
+a{color:var(--a);text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{background:radial-gradient(120% 90% at 50% 0%,#16224d 0%,#0a0f24 55%,#05070f 100%);color:#fff;padding:56px 22px 40px}
+.hero .back{display:block;text-align:center;font-size:14px;color:#c4cdf0;margin-bottom:18px}
+.hero .back a{color:#c4cdf0;border-bottom:1px solid rgba(196,205,240,.3)}
+.hero .date{text-align:center;font-size:13px;color:#c4cdf0;text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-bottom:14px}
+.hero h1{font-size:clamp(26px,3.6vw,38px);font-weight:800;letter-spacing:-.022em;line-height:1.2;text-align:center;color:#fff;max-width:640px;margin:0 auto}
+article{padding:48px 22px 64px}
+article p{margin:0 0 1em}
+article h2{font-size:22px;font-weight:800;letter-spacing:-.015em;margin:2em 0 .6em;color:var(--ink)}
+article h3{font-size:18px;font-weight:700;margin:1.6em 0 .5em;color:var(--ink)}
+article ul,article ol{margin:0 0 1em 1.6em;padding:0}
+article li{margin:.3em 0}
+article code{background:var(--code);padding:1px 6px;border-radius:5px;font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;font-size:14px}
+article pre{background:#0b1020;color:#e6e8f2;padding:18px 20px;border-radius:12px;overflow-x:auto;margin:1em 0;font:13px/1.55 ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace}
+article pre code{background:transparent;padding:0;color:inherit;font-size:13px}
+.cta{margin-top:48px;background:linear-gradient(135deg,#16224d,#0a0f24);color:#fff;border-radius:18px;padding:32px 28px;text-align:center}
+.cta h3{color:#fff;font-size:20px;font-weight:800;margin-bottom:8px;letter-spacing:-.01em}
+.cta p{color:#c4cdf0;font-size:15.5px;margin-bottom:16px;line-height:1.5}
+.cta a.btn{display:inline-block;background:#fff;color:var(--ink);font-weight:700;padding:11px 22px;border-radius:99px;font-size:15px}
+footer{text-align:center;padding:32px 22px 48px;color:var(--mut);font-size:14px;border-top:1px solid #e9ebf3;margin-top:32px}
+footer a{color:var(--mut)}
+</style></head><body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="back"><a href="/blog">← Blog</a></div>
+    <div class="date">2026-05-25 · Engineering</div>
+    <h1>Building Aside: a private on-device AI chat in 13 builds</h1>
+  </div>
+</header>
+
+<article class="wrap">
+
+<p>Aside is an iOS chat app that runs on Apple Intelligence. No API key field. No backend. No "sign in to continue." You open the app and you can talk to a language model on your phone. The conversation history is in SwiftData on the device. The inference happens on the Neural Engine. The whole thing works on a plane.</p>
+
+<p>The interesting question isn't "can you build a chat UI on top of <code>LanguageModelSession</code>" — yes, in about 30 lines. The interesting question is everything else: how do you persist conversations, how do you handle image attachments when the API is text-only, how do you integrate the other Apple Intelligence surfaces (Image Playground, Writing Tools, Translate, Summarize, Smart Reply) into a single coherent chat, and how do you ship it 13 builds deep without the architecture turning into spaghetti.</p>
+
+<p>This is the writeup. <a href="https://getaside.app?utm_source=tonysoftware&utm_medium=blog&utm_campaign=building-aside">Aside is free on the App Store</a>; the <a href="https://getaside.app?utm_source=tonysoftware&utm_medium=blog&utm_campaign=building-aside#source">full Xcode source is $19 on Polar</a>.</p>
+
+<h2>The FoundationModels wrapper</h2>
+
+<p>The whole "talk to a model" surface is one Swift file (<code>AIService.swift</code>), and the core of it is one <code>LanguageModelSession</code> instance:</p>
+
+<pre><code>@Observable
+@MainActor
+final class AIService {
+    private var session: LanguageModelSession
+
+    init(systemPrompt: String? = nil) {
+        self.currentInstructions = systemPrompt
+        if let systemPrompt {
+            self.session = LanguageModelSession(instructions: systemPrompt)
+        } else {
+            self.session = LanguageModelSession()
+        }
+    }
+
+    /// Recreate the underlying session with new instructions if they differ.
+    /// We don't reuse sessions across instruction changes because Apple's
+    /// FoundationModels binds instructions at session creation.
+    func updateInstructions(_ newInstructions: String) {
+        guard newInstructions != currentInstructions else { return }
+        currentInstructions = newInstructions
+        session = LanguageModelSession(instructions: newInstructions)
+    }
+    // ...
+}
+</code></pre>
+
+<p>The instruction-rebinding gotcha is real. Apple's <code>LanguageModelSession</code> takes its system prompt at construction time and doesn't expose a way to mutate it. If the user changes their persona (e.g., from "general assistant" to "Swift code reviewer"), you can't mutate the existing session — you have to throw it away and make a new one. The wrapper above handles that transparently; callers just call <code>updateInstructions(...)</code> and move on.</p>
+
+<h2>Image attachments to a text-only API</h2>
+
+<p>The Prompt API is text-only. Users send images. Bridge: Vision extracts a textual description (OCR'd text + scene classification) from the image, and that description gets appended to the user's prompt as inline context.</p>
+
+<p>Example: user attaches a screenshot of a Python stack trace and asks "what's wrong with this?". The pipeline becomes:</p>
+
+<ol>
+  <li>Vision OCRs the screenshot → multi-line text of the stack trace.</li>
+  <li>Vision classifies the image → tags like "text, document, screenshot."</li>
+  <li>Composed prompt: <code>"[Image context: OCR'd stack trace + 'screenshot' tag] User question: what's wrong with this?"</code></li>
+  <li>LanguageModelSession streams the answer.</li>
+</ol>
+
+<p>It's not as good as a true multimodal model that sees pixels, but it's surprisingly capable for text-heavy images (code, documents, receipts, error messages) — which are the vast majority of what users send to a chat app on their phone.</p>
+
+<h2>Five Apple Intelligence integrations</h2>
+
+<p>Apple Intelligence isn't one feature; it's a collection of surfaces. Aside integrates five of them into the chat flow:</p>
+
+<h3>1. Image Playground in the composer</h3>
+
+<p>Sparkle button next to the text field opens Apple's <code>.imagePlaygroundSheet</code> seeded with whatever you've typed. The generated image is attached as your next message (no extra step). Apple's modifier is one line of SwiftUI; the seeding-with-current-input + handle-the-result flow is ~15 lines around it.</p>
+
+<h3>2. Writing Tools on the input field</h3>
+
+<p>Long-press the text field → Rewrite / Proofread / Summarize / Make Friendly / etc. <em>This is one SwiftUI modifier</em>: <code>.writingToolsBehavior(.complete)</code>. Apple wires up the menu, the rewrite mechanics, and the UI animation. You write one line. The user gets a feature that would take a week to build from scratch with a custom LLM.</p>
+
+<h3>3. Conversation Summarize</h3>
+
+<p>Chat-menu item that opens a sheet with a 3-sentence summary of the conversation so far. Implementation: a fresh <code>LanguageModelSession</code> with summarizer instructions, streamed into a SwiftUI <code>Text</code> in a sheet. ~50 lines including the sheet UI.</p>
+
+<h3>4. Smart Reply chips</h3>
+
+<p>After every assistant message, three short tap-to-fill reply candidates appear above the keyboard. Generated by a quick <code>LanguageModelSession</code> with a "give me 3 short likely replies, one per line" prompt against the last assistant message. ~1 second to generate on iPhone 15 Pro+. Tap-to-insert; user keeps editorial control (no auto-send).</p>
+
+<h3>5. Translate (long-press)</h3>
+
+<p>Long-press any message → Translate → Apple's native on-device Translation overlay. Pick a target language, see translation. Works offline once the language pack is downloaded. Apple's <code>.translationPresentation</code> modifier; ~5 lines.</p>
+
+<h2>Persistence with SwiftData</h2>
+
+<p>One <code>Conversation</code> model + one <code>Message</code> model. SwiftData handles the storage. The hardest part wasn't the schema — it was making the chat list re-open the LAST conversation (not the first) on app launch, which sounds trivial but actually required threading the "active conversation ID" through <code>@AppStorage</code> + a small dance with SwiftUI's navigation state to avoid double-opens. Build 9 fix.</p>
+
+<h2>Why on-device-only is a constraint, not a marketing claim</h2>
+
+<p>Aside has zero network calls in the chat flow. Not "we anonymize" or "we don't store" — there's no endpoint to call. The only network code in the app is the App Store rating prompt's metadata fetch (Apple's API, runs on system schedule, not in any user-action path).</p>
+
+<p>This is enforced architecturally: there is no <code>URLSession</code> in the chat flow, no API key field anywhere in Settings, no "account" concept. If you wanted to send conversations off-device you'd have to add network code that doesn't currently exist. The constraint shapes everything else — no cloud sync means each iPhone is independent, no account means the onboarding skips a "sign in" step that would otherwise lose 40% of installs.</p>
+
+<h2>13 builds in three weeks — how the velocity stays</h2>
+
+<p>Each TestFlight build between v1.0 and the current v1.1 added one concrete user-visible thing or fixed one specific issue. Build 4: more features + contrast. Build 6: voice input. Build 9: keyboard pushup fix. Build 10: Image Playground. Build 11: Writing Tools. Build 12: Summarize. Build 13: Smart Reply. Build 14: Translate.</p>
+
+<p>Tactically what keeps the velocity going:</p>
+
+<ul>
+  <li><strong>One feature per build.</strong> Smaller diffs are easier to debug, easier to revert, easier to ship to TestFlight without breaking the prior build.</li>
+  <li><strong>Headless ship pipeline.</strong> <code>fastlane ios ship</code> does archive + sign + pilot upload in ~90 seconds. The friction of "submit a build" is gone, so it gets done.</li>
+  <li><strong>App Store metadata is git-tracked.</strong> Localized listing strings, screenshots, keywords — all in <code>fastlane/metadata/&lt;locale&gt;/</code>. Reviewing a metadata change is a PR diff, not a manual ASC click-through.</li>
+</ul>
+
+<h2>File structure</h2>
+
+<ul>
+  <li><code>App/</code> — <code>SoloApp</code> + <code>RootView</code>. Boots the app, decides onboarding vs main scene.</li>
+  <li><code>Features/Chat/</code> — <code>ChatView</code> (the meat — composer + message list + AI integrations) + <code>SummarySheet</code> (the on-device summarizer).</li>
+  <li><code>Features/History/</code> — <code>HistorySidebar</code>: search, share-as-Markdown, regenerate, delete.</li>
+  <li><code>Features/Onboarding/</code> — 4-step intro with custom illustrations.</li>
+  <li><code>Features/Settings/</code> — Persona presets, appearance, language picker.</li>
+  <li><code>Models/Conversation.swift</code> — SwiftData models.</li>
+  <li><code>Storage/AIService.swift</code> — FoundationModels wrapper described above.</li>
+  <li><code>Storage/VoiceDictation.swift</code> — Speech framework for mic input.</li>
+  <li><code>UI/</code> — Reusable views (message bubble, code block renderer, voice meter, etc.).</li>
+</ul>
+
+<p>~2,800 lines of SwiftUI + FoundationModels + SwiftData + Speech + Vision across 10 files. Zero third-party dependencies.</p>
+
+<h2>What you get for $19</h2>
+
+<p>The full Xcode project, the FoundationModels wrapper, all five AI-integration patterns above (each isolated to its own SwiftUI modifier or service class), the Vision-based image-context bridge, the SwiftData persistence layer, the Markdown + code-block renderer, the voice-dictation flow with auto-send toggle, and an <code>AGENTS.md</code> walking an AI coding agent through how to fork it into a different chat vertical (a domain-specific assistant, a focused-task helper, a multi-persona chat, anything that wants a chat UI on top of on-device intelligence).</p>
+
+<div class="cta">
+  <h3>Build your own on-device chat</h3>
+  <p>Aside source bundle — full Xcode project + 5 working Apple Intelligence integrations + AGENTS.md. $19 one-time.</p>
+  <a class="btn" href="https://getaside.app?utm_source=tonysoftware&utm_medium=blog&utm_campaign=building-aside#source">Buy the source — $19</a>
+</div>
+
+</article>
+
+<footer>
+  <a href="/blog">More posts</a> · <a href="/">All apps</a> · <a href="https://x.com/tdinh_me">@tdinh_me</a>
+</footer>
+
+</body></html>
