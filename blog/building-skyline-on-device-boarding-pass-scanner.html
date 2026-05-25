@@ -1,0 +1,177 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Building Skyline: an on-device boarding-pass scanner with Apple Intelligence — Tony Dinh</title>
+<meta name="description" content="How to ship a native iOS app that parses any boarding pass — barcode, photo, screenshot — using a three-tier extraction pipeline: on-device LLM, IATA BCBP barcode, OCR regex. Zero cloud, zero account. ~3,500 lines of SwiftUI + SceneKit.">
+<link rel="canonical" href="https://tonysoftware.com/blog/building-skyline-on-device-boarding-pass-scanner">
+<meta name="theme-color" content="#0a0f24">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tonysoftware.com/blog/building-skyline-on-device-boarding-pass-scanner">
+<meta property="og:title" content="Building Skyline: an on-device boarding-pass scanner with Apple Intelligence">
+<meta property="og:description" content="Three-tier extraction pipeline — Apple Intelligence + IATA BCBP barcode + OCR heuristics. Zero cloud, zero account. ~3,500 lines of SwiftUI + SceneKit.">
+<meta property="og:image" content="https://tonysoftware.com/og.png">
+<meta property="article:author" content="Tony Dinh">
+<meta property="article:published_time" content="2026-05-25T09:30:00+07:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@tdinh_me">
+<meta name="twitter:creator" content="@tdinh_me">
+<link rel="icon" type="image/png" href="/icon.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"Building Skyline: an on-device boarding-pass scanner with Apple Intelligence","datePublished":"2026-05-25T09:30:00+07:00","dateModified":"2026-05-25T09:30:00+07:00","author":{"@type":"Person","name":"Tony Dinh","url":"https://tonysoftware.com/"},"image":"https://tonysoftware.com/og.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://tonysoftware.com/blog/building-skyline-on-device-boarding-pass-scanner"},"publisher":{"@type":"Person","name":"Tony Dinh"}}
+</script>
+<style>
+:root{--ink:#0b1020;--mut:#5b6178;--bg:#f6f7fb;--a:#3a6df0;--code:#f0f2f8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:17px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+.wrap{max-width:720px;margin:0 auto;padding:0 22px}
+a{color:var(--a);text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{background:radial-gradient(120% 90% at 50% 0%,#16224d 0%,#0a0f24 55%,#05070f 100%);color:#fff;padding:56px 22px 40px}
+.hero .back{display:block;text-align:center;font-size:14px;color:#c4cdf0;margin-bottom:18px}
+.hero .back a{color:#c4cdf0;border-bottom:1px solid rgba(196,205,240,.3)}
+.hero .date{text-align:center;font-size:13px;color:#c4cdf0;text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-bottom:14px}
+.hero h1{font-size:clamp(26px,3.6vw,38px);font-weight:800;letter-spacing:-.022em;line-height:1.2;text-align:center;color:#fff;max-width:640px;margin:0 auto}
+article{padding:48px 22px 64px}
+article p{margin:0 0 1em}
+article h2{font-size:22px;font-weight:800;letter-spacing:-.015em;margin:2em 0 .6em;color:var(--ink)}
+article h3{font-size:18px;font-weight:700;margin:1.6em 0 .5em;color:var(--ink)}
+article ul,article ol{margin:0 0 1em 1.6em;padding:0}
+article li{margin:.3em 0}
+article code{background:var(--code);padding:1px 6px;border-radius:5px;font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;font-size:14px}
+article pre{background:#0b1020;color:#e6e8f2;padding:18px 20px;border-radius:12px;overflow-x:auto;margin:1em 0;font:13px/1.55 ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace}
+article pre code{background:transparent;padding:0;color:inherit;font-size:13px}
+.cta{margin-top:48px;background:linear-gradient(135deg,#16224d,#0a0f24);color:#fff;border-radius:18px;padding:32px 28px;text-align:center}
+.cta h3{color:#fff;font-size:20px;font-weight:800;margin-bottom:8px;letter-spacing:-.01em}
+.cta p{color:#c4cdf0;font-size:15.5px;margin-bottom:16px;line-height:1.5}
+.cta a.btn{display:inline-block;background:#fff;color:var(--ink);font-weight:700;padding:11px 22px;border-radius:99px;font-size:15px}
+footer{text-align:center;padding:32px 22px 48px;color:var(--mut);font-size:14px;border-top:1px solid #e9ebf3;margin-top:32px}
+footer a{color:var(--mut)}
+</style></head><body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="back"><a href="/blog">← Blog</a></div>
+    <div class="date">2026-05-25 · Engineering</div>
+    <h1>Building Skyline: an on-device boarding-pass scanner with Apple Intelligence</h1>
+  </div>
+</header>
+
+<article class="wrap">
+
+<p>Every flight tracker app I've used wants my email, an account, and a server to call. Skyline doesn't. You take a photo of your boarding pass; the iPhone parses it; the flight shows up on a 3D globe. Nothing leaves the device. Works in Airplane Mode. No login screen exists.</p>
+
+<p>The hard part — and the part I want to write up — is how the parsing actually works. Boarding passes come in three flavors (photo of paper, screenshot of mobile, PDF in Wallet) and three formats (BCBP barcode that's machine-precise, OCR-able text that's noisy, sometimes both, sometimes neither readable). Apple Intelligence is great when it's there. It's not there on every device. The IATA barcode is ground truth but only if you can decode it.</p>
+
+<p>So Skyline runs a three-tier extraction pipeline with a deterministic merge step. Below is how it's structured. <a href="https://flownmap.com?utm_source=tonysoftware&utm_medium=blog&utm_campaign=building-skyline">Skyline is free on the App Store</a>; the <a href="https://flownmap.com?utm_source=tonysoftware&utm_medium=blog&utm_campaign=building-skyline#source">full Xcode source is $19 on Polar</a> if you want to fork it for a different vertical.</p>
+
+<h2>The three tiers</h2>
+
+<p>The pipeline runs in this order on every captured image:</p>
+
+<ol>
+  <li><strong>Vision OCR + on-device Foundation Models</strong> — the primary parser. Takes the OCR text, prompts the on-device LLM to extract <code>{airline, flight#, from, to, date, seat, class, name}</code> as structured JSON.</li>
+  <li><strong>PDF417 / QR barcode → IATA BCBP decode</strong> — deterministic machine data. Used to <em>verify and correct</em> the AI result on the four identity fields (airline, flight number, route, date). The barcode is ground truth.</li>
+  <li><strong>Heuristics</strong> — regex-on-OCR-text fallback for when Apple Intelligence isn't available on the device (older hardware) or returns too little.</li>
+</ol>
+
+<p>If everything fails, the user still gets whatever was extracted and can edit + save manually. <em>The pipeline never refuses to return a result.</em></p>
+
+<h2>Why three tiers and not one</h2>
+
+<p>Each tier on its own has known failure modes:</p>
+
+<ul>
+  <li><strong>AI alone:</strong> hallucinates plausible-but-wrong flight numbers when the OCR text is ambiguous (BA42 vs BA420 vs B447). Fast on Apple Intelligence devices, unavailable on older ones.</li>
+  <li><strong>Barcode alone:</strong> 100% accurate when readable, but mobile screenshots often crop the barcode out, and photo-of-paper boarding passes have variable scan quality. ~40% of real-world boarding passes I tested had no decodable barcode.</li>
+  <li><strong>Heuristics alone:</strong> works for ~70% of standard layouts. Falls apart on regional carriers with non-Latin script or unusual layouts.</li>
+</ul>
+
+<p>Composed: barcode <em>overrides</em> the AI result on the four identity fields when present + decodable. AI fills in the rest (seat, class, passenger name — barcode has some of these but not reliably). Heuristics are the floor when nothing else works.</p>
+
+<h2>The merge rule</h2>
+
+<p>The merge logic is the actual interesting piece. Most pipelines either "use the first available result" (loses information) or "use the most recent" (loses ground truth). Skyline uses a field-level merge with explicit precedence:</p>
+
+<pre><code>// Priority per field:
+// airline, flight#, route, date  →  barcode > AI > heuristic
+// seat, class, name              →  AI > barcode > heuristic
+// any field not yet filled       →  pull from next-best tier
+</code></pre>
+
+<p>Two parsers agreeing isn't required. One parser providing high-confidence data is enough. The pipeline only refuses to commit when ALL three return empty.</p>
+
+<h2>Why Apple Intelligence (not a cloud LLM)</h2>
+
+<p>The first design decision was: do I call OpenAI / Anthropic / Gemini, or do I use the on-device model?</p>
+
+<p>Cloud LLM means: an API key (mine or BYOK), a server (mine or proxy), latency (200-800ms per parse), cost (cents per parse × N users), privacy concerns (you're sending the user's flight history to a third party), and fragility (model versions change, prompts drift). For a one-shot extraction that runs ~5 times a year per user, the cloud cost is fine. Everything else is friction.</p>
+
+<p>On-device LLM means: zero network calls, zero per-call cost, zero leaked data, ~100-300ms parse time on iPhone 15 Pro+, and the obvious downside — only works on Apple-Intelligence-eligible devices (iPhone 15 Pro and newer + M-series iPads as of iOS 26).</p>
+
+<p>The availability check is one variable:</p>
+
+<pre><code>static var isAvailable: Bool {
+    #if canImport(FoundationModels)
+    if #available(iOS 26.0, *) {
+        return SystemLanguageModel.default.isAvailable
+    }
+    #endif
+    return false
+}
+</code></pre>
+
+<p>The pipeline simply skips the AI tier when it's not available. The fallback heuristic + barcode tiers still work on older devices; you just lose the high-quality OCR-to-structured-data step. Skyline's MIN-iOS is the FoundationModels minimum so the rest works everywhere.</p>
+
+<h2>The 3D globe</h2>
+
+<p>Once a flight is saved, it pins as a glowing great-circle arc on a SceneKit 3D Earth. Night-side lights are baked into the Earth texture; great circles are computed from the lat/long pairs and drawn as parametric curves on a transparent overlay layer. The globe spins slowly on idle; pinch-zoom shows individual airport pins.</p>
+
+<p>There's nothing exotic in the SceneKit setup. The interesting bit is keeping it 60fps on a phone: pre-compute all flight arcs at load time, throttle the rotation animation to 30fps when there are >50 flights, and use SceneKit's level-of-detail to swap in a lower-poly Earth mesh on iPhone 12 and older.</p>
+
+<h2>What's offline</h2>
+
+<p>Everything. Airport database (6,000+ entries) ships in the app bundle as a compressed JSON. Boarding pass parsing is on-device. Globe rendering is local. The only network call in the entire app is the App Store rating prompt's metadata fetch, which is Apple's API and runs on the system schedule.</p>
+
+<p>This isn't a marketing tagline. The "Airplane Mode" use case — open the app on the plane, see your past flights, look at the route you just took — was the original design constraint. If anything reaches the network, the design failed.</p>
+
+<h2>SwiftData for the log</h2>
+
+<p>Every parsed flight is saved to SwiftData. The model is one class (<code>Flight</code>) with the obvious fields. Search uses SwiftUI's native <code>.searchable</code> with a custom predicate that matches airport codes, airline names, dates, and free-text. Sort is by creation date descending by default (a recent fix from beta feedback — was alphabetical, which made no sense).</p>
+
+<h2>File structure</h2>
+
+<ul>
+  <li><code>App/</code> — <code>SkylineApp</code> + <code>RootView</code> with the 3-tab structure (Globe / Capture / Settings).</li>
+  <li><code>Features/Capture/</code> — Camera + photo library + multi-import flow.</li>
+  <li><code>Features/Globe/</code> — SceneKit 3D Earth + great-circle arc renderer.</li>
+  <li><code>Features/History/</code> — Searchable flight list + filters.</li>
+  <li><code>Features/FlightDetail/</code> — Per-flight view with airport context + Save-to-Photos.</li>
+  <li><code>Features/Review/</code> — Edit-before-save sheet for low-confidence parses.</li>
+  <li><code>Features/Onboarding/</code> — 3-step intro.</li>
+  <li><code>Services/BoardingPassPipeline.swift</code> — the orchestrator described above.</li>
+  <li><code>Services/AIExtractor.swift</code> — Apple Intelligence wrapper.</li>
+  <li><code>Services/BCBPParser.swift</code> — IATA BCBP M1/M2 barcode decoder.</li>
+  <li><code>Services/HeuristicExtractor.swift</code> — regex fallback parser.</li>
+  <li><code>Services/BoardingPassScanner.swift</code> — Vision OCR + barcode detection.</li>
+  <li><code>Models/</code> — <code>Flight</code>, <code>Airport</code>, <code>ParsedFlight</code>.</li>
+  <li><code>Storage/</code> — SwiftData container + airport database loader.</li>
+</ul>
+
+<p>~3,500 lines of SwiftUI + SceneKit across 24 files. Zero third-party dependencies. The hardest file in the project is <code>BoardingPassPipeline.swift</code>; the second hardest is the SceneKit great-circle math.</p>
+
+<h2>What you get for $19</h2>
+
+<p>The full Xcode project, every Swift file above, the SceneKit Earth model + textures, the 6,000-airport JSON, the IATA BCBP decoder (worth the price by itself if you're building any travel app), and an <code>AGENTS.md</code> walking an AI coding agent through how to fork it into a different vertical (a hotel-confirmation parser, an Amtrak rail-log app, a road-trip recorder, anything with structured tickets and a map view).</p>
+
+<div class="cta">
+  <h3>Build your own travel log</h3>
+  <p>Skyline source bundle — full Xcode project + SceneKit globe + BCBP decoder + 6,000-airport DB + AGENTS.md. $19 one-time.</p>
+  <a class="btn" href="https://flownmap.com?utm_source=tonysoftware&utm_medium=blog&utm_campaign=building-skyline#source">Buy the source — $19</a>
+</div>
+
+</article>
+
+<footer>
+  <a href="/blog">More posts</a> · <a href="/">All apps</a> · <a href="https://x.com/tdinh_me">@tdinh_me</a>
+</footer>
+
+</body></html>
