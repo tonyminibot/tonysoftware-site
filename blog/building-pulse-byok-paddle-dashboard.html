@@ -1,0 +1,170 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Building Pulse: a BYOK Paddle revenue dashboard for iOS — Tony Dinh</title>
+<meta name="description" content="How to ship a native iOS dashboard that talks to Paddle Billing directly from the device — no backend, no auth service, no DB. ~2,800 lines of SwiftUI.">
+<link rel="canonical" href="https://tonysoftware.com/blog/building-pulse-byok-paddle-dashboard">
+<meta name="theme-color" content="#0a0f24">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://tonysoftware.com/blog/building-pulse-byok-paddle-dashboard">
+<meta property="og:title" content="Building Pulse: a BYOK Paddle revenue dashboard for iOS">
+<meta property="og:description" content="No backend, no auth service, no DB. The API key lives in Keychain; the network path is iPhone → Paddle, nothing in between. ~2,800 lines of SwiftUI.">
+<meta property="og:image" content="https://tonysoftware.com/og.png">
+<meta property="article:author" content="Tony Dinh">
+<meta property="article:published_time" content="2026-05-25T08:00:00+07:00">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@tdinh_me">
+<meta name="twitter:creator" content="@tdinh_me">
+<link rel="icon" type="image/png" href="/icon.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","headline":"Building Pulse: a BYOK Paddle revenue dashboard for iOS","datePublished":"2026-05-25T08:00:00+07:00","dateModified":"2026-05-25T08:00:00+07:00","author":{"@type":"Person","name":"Tony Dinh","url":"https://tonysoftware.com/"},"image":"https://tonysoftware.com/og.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://tonysoftware.com/blog/building-pulse-byok-paddle-dashboard"},"publisher":{"@type":"Person","name":"Tony Dinh"}}
+</script>
+<style>
+:root{--ink:#0b1020;--mut:#5b6178;--bg:#f6f7fb;--a:#3a6df0;--code:#f0f2f8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:17px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+.wrap{max-width:720px;margin:0 auto;padding:0 22px}
+a{color:var(--a);text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{background:radial-gradient(120% 90% at 50% 0%,#16224d 0%,#0a0f24 55%,#05070f 100%);color:#fff;padding:56px 22px 40px}
+.hero .back{display:block;text-align:center;font-size:14px;color:#c4cdf0;margin-bottom:18px}
+.hero .back a{color:#c4cdf0;border-bottom:1px solid rgba(196,205,240,.3)}
+.hero .date{text-align:center;font-size:13px;color:#c4cdf0;text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-bottom:14px}
+.hero h1{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.022em;line-height:1.18;text-align:center;color:#fff;max-width:600px;margin:0 auto}
+article{padding:48px 22px 64px}
+article p{margin:0 0 1em}
+article h2{font-size:22px;font-weight:800;letter-spacing:-.015em;margin:2em 0 .6em;color:var(--ink)}
+article h3{font-size:18px;font-weight:700;margin:1.6em 0 .5em;color:var(--ink)}
+article ul,article ol{margin:0 0 1em 1.6em;padding:0}
+article li{margin:.3em 0}
+article code{background:var(--code);padding:1px 6px;border-radius:5px;font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;font-size:14px}
+article pre{background:#0b1020;color:#e6e8f2;padding:18px 20px;border-radius:12px;overflow-x:auto;margin:1em 0;font:13px/1.55 ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace}
+article pre code{background:transparent;padding:0;color:inherit;font-size:13px}
+article blockquote{border-left:3px solid #d4dbf0;padding:6px 0 6px 16px;margin:1em 0;color:var(--mut);font-style:italic}
+.cta{margin-top:48px;background:linear-gradient(135deg,#16224d,#0a0f24);color:#fff;border-radius:18px;padding:32px 28px;text-align:center}
+.cta h3{color:#fff;font-size:20px;font-weight:800;margin-bottom:8px;letter-spacing:-.01em}
+.cta p{color:#c4cdf0;font-size:15.5px;margin-bottom:16px;line-height:1.5}
+.cta a.btn{display:inline-block;background:#fff;color:var(--ink);font-weight:700;padding:11px 22px;border-radius:99px;font-size:15px}
+footer{text-align:center;padding:32px 22px 48px;color:var(--mut);font-size:14px;border-top:1px solid #e9ebf3;margin-top:32px}
+footer a{color:var(--mut)}
+</style></head><body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="back"><a href="/blog">← Blog</a></div>
+    <div class="date">2026-05-25 · Engineering</div>
+    <h1>Building Pulse: a BYOK Paddle revenue dashboard for iOS</h1>
+  </div>
+</header>
+
+<article class="wrap">
+
+<p>I check my Paddle revenue about ten times a day. The web dashboard takes 3-4 seconds to load on a good connection, longer when I'm tethered, and the data I actually care about — <em>how am I doing today vs the average?</em> — is buried under three clicks and a date-picker that doesn't remember my last choice.</p>
+
+<p>So I built <a href="https://pulserevenue.app">Pulse</a>: a native iOS app that talks to Paddle directly from the phone. Today / 7-day / 30-day windows, each with a comparison against the previous period of equal length, and Home + Lock screen widgets so I see the number without unlocking. Free on the <a href="https://apps.apple.com/app/pulse-paddle-revenue/id6747657091">App Store</a>; the full Xcode source is <a href="https://buy.polar.sh/polar_cl_Ho9r10UJfm1zHYGPT4GEFg2q9uhKTxwSaAs6a1vr6Gd">$19 on Polar</a> if you want to fork it.</p>
+
+<p>This is the architecture writeup — what the app does, why it's structured the way it is, and the one piece of logic that took the longest to get right (cross-period comparison when the current period isn't done yet).</p>
+
+<h2>The BYOK choice</h2>
+
+<p>The first decision was the biggest: should the app proxy through a backend, or should it talk to Paddle directly?</p>
+
+<p>Proxy means a backend service, an auth flow, a database to cache user keys, a privacy policy that's actually serious because you're holding a payment-provider API key, and a billing tier on the proxy itself the moment more than a handful of people use it.</p>
+
+<p>Direct (BYOK = bring-your-own-key) means none of that. The user pastes their Paddle read-only API key into the app once. iOS Keychain holds it. Every request goes phone → Paddle. No backend, no auth, no DB.</p>
+
+<p>The downsides are real: no shared device sync (each iPhone has its own key), no analytics on what users do (because there IS no backend), and the App Review reviewer needs a way to test the app without a real Paddle account. The first two I'm fine with — those are features, not bugs, for a tool that's about <em>my</em> revenue on <em>my</em> phone. The third one is solved with a demo-key pattern: a hard-coded sentinel value that, when entered, routes to a <code>DemoPaddleClient</code> returning fixture data. Apple G2.1(a) compliant; the reviewer never needs a real Paddle login.</p>
+
+<h2>The dashboard math</h2>
+
+<p>Every revenue dashboard does <em>this period vs the previous period</em>. The naïve implementation works fine for 7-day and 30-day windows: sum the last 7 days, sum the 7 days before that, divide, show the delta.</p>
+
+<p>For <em>today</em>, the naïve implementation lies. If I check Pulse at 09:00, the "today" total covers 9 hours; the "yesterday" comparison covers all 24. Today will always look catastrophically bad until late evening.</p>
+
+<p>The fix: compare today's first-9-hours against yesterday's same-first-9-hours, not against yesterday's whole day. The "displayed previous" value can still be yesterday's full total — that's what the human wants to see for context — but the percentage delta runs on equal-elapsed-time slices.</p>
+
+<p>Here's the relevant chunk from <code>RevenueAggregator.swift</code>:</p>
+
+<pre><code>let cur = series(pair.current)
+// For "today", compare against yesterday up to the SAME time of day
+// so the % isn't misleadingly negative early in the day.
+let prevRange: DateRange
+if period == .today {
+    let elapsed = now.timeIntervalSince(pair.current.from)
+    prevRange = DateRange(from: pair.previous.from,
+                          to: pair.previous.from.addingTimeInterval(elapsed))
+} else {
+    prevRange = pair.previous
+}
+let prev = series(prevRange)
+</code></pre>
+
+<p>Five lines, but they're the lines I cared about. Everything else in the app exists to put this in front of my eye in under a second.</p>
+
+<h2>On-device cache + incremental sync</h2>
+
+<p>Paddle's API returns transactions paginated. A pull of the last 30 days for a moderately active store is hundreds of requests if you ask one page at a time. Doing that on every app launch would chew through my Paddle rate limit and burn my battery.</p>
+
+<p>So Pulse keeps a local 62-day cache (CoreData under the hood, accessed through a lightweight <code>CachedTxn</code> model). On launch it fetches only the transactions newer than the most recent cached <code>billed_at</code>. The first sync after install is the expensive one; everything after is incremental. The widgets read from the same cache, so they update instantly without making a network call.</p>
+
+<p>The trade-off: if a refund or void happens to an OLD transaction (say, 45 days back), the cache won't notice until the next full sync. That's a known limitation. The Settings screen has a "rebuild cache" action that does a full pull when the data looks off.</p>
+
+<h2>The provider-agnostic seam</h2>
+
+<p>The Paddle Billing API surface lives behind one protocol:</p>
+
+<pre><code>protocol PaddleClient {
+    func transactions(after: Date?) async throws -> [Txn]
+    func subscriptions() async throws -> [Sub]
+    // ... a handful more
+}
+</code></pre>
+
+<p>Two implementations ship in the source bundle: <code>PaddleClient</code> (the real one) and <code>DemoPaddleClient</code> (the App Review fixture). The seam exists because I wanted to be able to swap providers without rewriting the UI — Stripe, Lemon Squeezy, or my own thing in the future, all the dashboard cares about is that something returns transactions and subscriptions.</p>
+
+<p>If you fork Pulse and want to point it at Stripe instead, you write <code>StripeClient: PaddleClient</code>, change one line in the app's init to instantiate it, and the dashboard works. The math doesn't care.</p>
+
+<h2>Widgets are 90% of the value</h2>
+
+<p>Pulse's widgets are the feature I use most. Small widget shows today's number with the delta. Medium shows today + 7-day + 30-day with a tiny sparkline. They use WidgetKit + App Group, sharing the CoreData cache with the main app via <code>AppGroupConstants.suiteName</code>.</p>
+
+<p>The trick to making widgets feel instant: the timeline provider doesn't fetch from Paddle. It reads from the cache, period. The main app handles refresh on its own schedule (and on every foreground); the widgets just render what's already there. Apple's <code>relevantContexts</code> hint helps the system show widgets at the right moment without you orchestrating it manually.</p>
+
+<h2>What I didn't build</h2>
+
+<p>No login, no user accounts, no cloud sync, no analytics (in the SaaS-tracking sense), no team features, no per-customer drill-downs beyond what fits in a single sheet, no notifications for big sales (yet — that's the obvious v1.1 add). The app is intentionally a <em>read-only number-in-pocket</em> tool. If you need more, the Paddle web dashboard is right there.</p>
+
+<p>The whole codebase is ~2,800 lines of SwiftUI across 20 files. Zero third-party dependencies. It builds clean on a fresh Xcode install. The provider seam means most of it is reusable if you switch payment providers.</p>
+
+<h2>The structure, by folder</h2>
+
+<ul>
+  <li><code>App/</code> — <code>PulseApp</code> + <code>RootView</code>. Boots the app, hands off to the main scene.</li>
+  <li><code>Features/Dashboard/</code> — Today / 7d / 30d cards + sparkline chart.</li>
+  <li><code>Features/Transactions/</code> — Searchable list + detail sheet.</li>
+  <li><code>Features/Onboarding/</code> — 3-step intro + Paddle key entry. Demo-key trigger lives here.</li>
+  <li><code>Features/Settings/</code> — Keychain key management, account add/switch, cache rebuild, language picker, about.</li>
+  <li><code>Models/PaddleModels.swift</code> — <code>Txn</code>, <code>Sub</code>, <code>RevenueWindow</code>, <code>RevenueType</code>, etc.</li>
+  <li><code>Services/PaddleClient.swift</code> + <code>DemoPaddleClient.swift</code> + <code>RevenueAggregator.swift</code> — The provider abstraction and the math.</li>
+  <li><code>Storage/</code> — Keychain wrapper, CoreData cache, App Group constants.</li>
+  <li><code>PulseWidget/</code> — Separate WidgetKit extension, shares Storage via App Group.</li>
+</ul>
+
+<p>One file per concept. No clever inheritance. The hardest file in the whole project is <code>RevenueAggregator.swift</code> at ~200 lines.</p>
+
+<h2>What you get for $19</h2>
+
+<p>The full Xcode project (<code>project.yml</code> for xcodegen so signing/team is one edit), every Swift file above, the widget extension, an <code>AGENTS.md</code> that walks an AI coding agent through where everything lives and how to extend it. Personal + commercial use, rebrand it, ship your own version on the App Store. The only thing you can't do is resell the unmodified source.</p>
+
+<div class="cta">
+  <h3>Build your own</h3>
+  <p>Pulse source bundle — full Xcode project + AGENTS.md. $19 one-time, no subscription.</p>
+  <a class="btn" href="https://buy.polar.sh/polar_cl_Ho9r10UJfm1zHYGPT4GEFg2q9uhKTxwSaAs6a1vr6Gd">Buy the source — $19</a>
+</div>
+
+</article>
+
+<footer>
+  <a href="/blog">More posts</a> · <a href="/">All apps</a> · <a href="https://x.com/tdinh_me">@tdinh_me</a>
+</footer>
+
+</body></html>
