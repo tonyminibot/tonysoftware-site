@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tony Dinh — Blog</title>
+    <link>https://tonysoftware.com/blog/</link>
+    <description>Technical notes from the indie iOS apps I ship — SwiftUI, on-device AI, BYOK patterns, and the boring infra that makes indie iOS work.</description>
+    <language>en-us</language>
+    <atom:link href="https://tonysoftware.com/blog/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 25 May 2026 10:30:00 +0700</lastBuildDate>
+    <item>
+      <title>Building Aside: a private on-device AI chat in 13 builds</title>
+      <link>https://tonysoftware.com/blog/building-aside-on-device-ai-chat</link>
+      <guid isPermaLink="true">https://tonysoftware.com/blog/building-aside-on-device-ai-chat</guid>
+      <pubDate>Mon, 25 May 2026 10:30:00 +0700</pubDate>
+      <description><![CDATA[iOS chat app on top of Apple Intelligence's FoundationModels — no cloud, no API key, no account. Five AI integrations (Image Playground, Writing Tools, Translate, Summarize, Smart Reply) stitched into one chat. ~2,800 lines of SwiftUI + SwiftData.]]></description>
+    </item>
+  </channel>
+</rss>
